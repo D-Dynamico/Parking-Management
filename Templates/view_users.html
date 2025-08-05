@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Users Management - Vehicle Parking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-users"></i> Registered Users</h3>
+            </div>
+            <div class="card-body">
+                {% if users %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Registration Date</th>
+                                    <th>Total Reservations</th>
+                                    <th>Current Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>
+                                        <i class="fas fa-user"></i> {{ user.username }}
+                                    </td>
+                                    <td>
+                                        {{ user.registration_timestamp.strftime('%B %d, %Y') }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ user.reservations|length }}</span>
+                                    </td>
+                                    <td>
+                                        {% set active_reservation = user.reservations|selectattr('leaving_timestamp', 'none')|first %}
+                                        {% if active_reservation %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-car"></i> Parked
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Available
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Users Registered</h4>
+                        <p class="text-muted">No users have registered yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
