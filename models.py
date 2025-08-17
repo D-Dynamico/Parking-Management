@@ -110,3 +110,5 @@ class ParkingReservation(db.Model):
             hours_parked = self.duration_hours
             return round(hours_parked * self.parking_cost_per_unit_time, 2)
         return 0  # Can't calculate cost if they haven't left yet
+    
+    #Just a comment
